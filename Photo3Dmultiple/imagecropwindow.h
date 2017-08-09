@@ -43,6 +43,7 @@ public slots:
     void handleBtnFeature();
     void handleBtnOne();
     void handleBtnAll();
+    void handleBtnDistance();
 
 private:
     bool setImageFeature(paintingInfo *imginfo, std::vector<float> &feature_set);
@@ -57,6 +58,11 @@ private:
     void setThreeAuthor(int a, int b, int c);
     void setTwoAuthor(int a, int b);
     void setAuthor(int a);
+
+    float computedistance(std::vector<float> a, std::vector<float> b);
+    float computeAVGdistance(std::vector<std::vector<float> > asets, std::vector<std::vector<float> > bsets);
+
+    void writeVectToFile(std::vector<std::vector<float> > sets, const char* filename);
 
 //    QImage image;
 //    QLabel *imagelbl;

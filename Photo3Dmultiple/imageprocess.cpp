@@ -244,8 +244,11 @@ int imageprocess::computeSpecSize(QImage org, int level){
 //    imshow("complex", complex);
     Mat magI = updateMag(complex);
 
-    double th = computeThresholdValue(magI, 2000);
-    threshold(magI, magI, th, 1, 0);
+//    double th = computeThresholdValue(magI, 2000);
+    threshold(magI, magI, 0.6, 1, 0);
+
+//    string file = "/Users/wejaq/Documents/test/temp/org.jpg";
+//    imwrite(file, magI);
 
 //    vector<int> result;
     int radius = magI.cols/2;

@@ -216,6 +216,109 @@ void ImageCropWindow::handleBtnOne()
     }
 }
 
+float ImageCropWindow::computedistance(std::vector<float> a, std::vector<float> b)
+{
+    float dist = 0;
+    for(int i = 0; i<a.size(); i++){
+        dist += fabs(a[i]-b[i]);
+    }
+    return (dist/a.size());
+}
+
+void ImageCropWindow::writeVectToFile(std::vector<std::vector<float> > sets, const char* filename)
+{
+//    cv::FileStorage file(filename, cv::FileStorage::WRITE);
+
+    Mat mat(sets.size(), descriptor_size, CV_32FC1);
+    convertVectortoMatrix(sets, mat);
+    std::cout<<filename<<std::endl;
+    std::cout<<mat<<std::endl;
+
+//    file << mat;
+}
+
+void ImageCropWindow::handleBtnDistance()
+{
+    QString allfile = QString("/Users/wejaq/Documents/test/dataset/test/allsets.xml");
+
+    std::vector<std::vector<float> > alldiff;
+    std::vector<int> allLabels;
+    createSet(allfile, alldiff, allLabels);
+
+    int currentlabel = allLabels[0];
+    std::vector<std::vector<float> > asets;
+    std::vector<std::vector<float> > bsets;
+    std::vector<std::vector<float> > csets;
+    std::vector<std::vector<float> > dsets;
+    std::vector<std::vector<float> > esets;
+    std::vector<std::vector<float> > fsets;
+
+
+    for(int i = 0; i<alldiff.size(); i++){
+        if(allLabels[i] == 0)
+        {
+            asets.push_back(alldiff[i]);
+        }
+        else if(allLabels[i] == 1)
+        {
+            bsets.push_back(alldiff[i]);
+        }
+        else if(allLabels[i] == 2)
+        {
+            csets.push_back(alldiff[i]);
+        }
+        else if(allLabels[i] == 3)
+        {
+            dsets.push_back(alldiff[i]);
+        }
+        else if(allLabels[i] == 4)
+        {
+            esets.push_back(alldiff[i]);
+        }
+        else if(allLabels[i] == 5)
+        {
+            fsets.push_back(alldiff[i]);
+        }
+    }
+    writeVectToFile(asets, "/Users/wejaq/Documents/test/dataset/test/a.csv");
+    writeVectToFile(bsets, "/Users/wejaq/Documents/test/dataset/test/b.csv");
+    writeVectToFile(csets, "/Users/wejaq/Documents/test/dataset/test/c.csv");
+    writeVectToFile(dsets, "/Users/wejaq/Documents/test/dataset/test/d.csv");
+    writeVectToFile(esets, "/Users/wejaq/Documents/test/dataset/test/e.csv");
+    writeVectToFile(fsets, "/Users/wejaq/Documents/test/dataset/test/f.csv");
+
+    std::vector<std::vector<std::vector<float> >> allsets;
+    allsets.push_back(asets);
+    allsets.push_back(bsets);
+    allsets.push_back(csets);
+    allsets.push_back(dsets);
+    allsets.push_back(esets);
+    allsets.push_back(fsets);
+
+    for(int i = 0; i< 6; i++)
+    {
+        for(int j = i+1; j<6; j++)
+        {
+            float avgdis = computeAVGdistance(allsets[i], allsets[j]);
+            std::cout<<"["<<i<<","<<j<<"]:"<<avgdis<<std::endl;
+        }
+    }
+
+}
+
+float ImageCropWindow::computeAVGdistance(std::vector<std::vector<float> > asets, std::vector<std::vector<float> > bsets)
+{
+    float distanceFromAB = 0;
+
+    for(int i = 0; i<asets.size(); i++){
+        for(int j = 0; j<bsets.size(); j++){
+            distanceFromAB += computedistance(asets[i], bsets[j]);
+        }
+    }
+    float avgdis = (distanceFromAB/(asets.size()*bsets.size()));
+    return avgdis;
+}
+
 void ImageCropWindow::handleBtnFeature()
 {
 //    QString xmlfilename = QFileDialog::getOpenFileName(this,
