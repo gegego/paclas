@@ -147,8 +147,8 @@ QImage imageprocess::computeSpectra(QImage org) {
 
     Mat magI = updateMag(complex);
 
-    double th = computeThresholdValue(magI, 2000);
-    threshold(magI, magI, th, 1, 0);
+//    double th = computeThresholdValue(magI, 2000);
+    threshold(magI, magI, 0.6, 1, 0);
 
     QImage result = QtOcv::mat2Image(magI);
     return result;
